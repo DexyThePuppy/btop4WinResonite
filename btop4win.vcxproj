@@ -287,7 +287,7 @@
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalDependencies>psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ShowProgress>NotSet</ShowProgress>
@@ -308,7 +308,7 @@
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalDependencies>psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -330,7 +330,7 @@
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalDependencies>psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -358,7 +358,7 @@
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalDependencies>psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -385,6 +385,8 @@
     <ClCompile Include="src\btop_menu.cpp" />
     <ClCompile Include="src\btop_theme.cpp" />
     <ClCompile Include="src\btop_tools.cpp" />
+    <ClCompile Include="src\btop_websocket.cpp" />
+    <ClCompile Include="src\vt_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\robin_hood.h" />
@@ -397,6 +399,8 @@
     <ClInclude Include="src\btop_shared.hpp" />
     <ClInclude Include="src\btop_theme.hpp" />
     <ClInclude Include="src\btop_tools.hpp" />
+    <ClInclude Include="src\btop_websocket.hpp" />
+    <ClInclude Include="src\vt_renderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

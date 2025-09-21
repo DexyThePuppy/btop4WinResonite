@@ -37,6 +37,7 @@ tab-size = 4
 #include <btop_theme.hpp>
 #include <btop_draw.hpp>
 #include <btop_menu.hpp>
+#include <btop_websocket.hpp>
 
 using std::string, std::string_view, std::vector, std::atomic, std::endl, std::cout, std::min, std::flush, std::endl;
 using std::string_literals::operator""s, std::to_string;
@@ -196,6 +197,12 @@ void clean_quit(int sig) {
 	if (Global::quitting) return;
 	Global::quitting = true;
 	Runner::stop();
+
+	//? Stop WebSocket server if running
+	if (Config::getB("enable_websocket") && WebSocket::server_running) {
+		WebSocket::stop();
+		Logger::info("WebSocket server stopped");
+	}
 
 	Config::write();
 
@@ -456,10 +463,21 @@ namespace Runner {
 			}
 
 			//? If overlay isn't empty, print output without color and then print overlay on top
-			cout << Term::sync_start << (conf.overlay.empty()
+			string final_output = conf.overlay.empty()
 					? output
-					: (output.empty() ? "" : Fx::ub + Theme::c("inactive_fg") + Fx::uncolor(output)) + conf.overlay)
-				<< Term::hide_cursor << Term::sync_end << flush;
+					: (output.empty() ? "" : Fx::ub + Theme::c("inactive_fg") + Fx::uncolor(output)) + conf.overlay;
+			
+			cout << Term::sync_start << final_output << Term::hide_cursor << Term::sync_end << flush;
+			
+			//? Send output to WebSocket clients if enabled
+			try {
+				if (Config::getB("enable_websocket") && !final_output.empty()) {
+					std::string html_frame = WebSocket::processToResoniteHTML(final_output);
+					WebSocket::broadcast(html_frame);
+				}
+			} catch (const std::exception& e) {
+				Logger::warning("WebSocket broadcast error: " + (string)e.what());
+			}
 		}
 		//* ----------------------------------------------- THREAD LOOP -----------------------------------------------
 		
@@ -608,6 +626,21 @@ int main(int argc, char **argv) {
 	}
 	else {
 		Global::_runner_started = true;
+	}
+
+	//? Initialize and start WebSocket server if enabled
+	try {
+		if (Config::getB("enable_websocket")) {
+			int ws_port = Config::getI("websocket_port");
+			if (WebSocket::init(ws_port)) {
+				WebSocket::start();
+				Logger::info("WebSocket server started on port " + std::to_string(ws_port));
+			} else {
+				Logger::error("Failed to initialize WebSocket server");
+			}
+		}
+	} catch (const std::exception& e) {
+		Logger::error("Exception in WebSocket initialization: " + (string)e.what());
 	}
 
 	//? Calculate sizes of all boxes

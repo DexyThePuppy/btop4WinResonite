@@ -178,7 +178,11 @@ namespace Config {
 		{"show_battery", 		"#* Show battery stats in top right if battery is present."},
 
 		{"log_level", 			"#* Set loglevel for \"~/.config/btop/btop.log\" levels are: \"ERROR\" \"WARNING\" \"INFO\" \"DEBUG\".\n"
-								"#* The level set includes all lower levels, i.e. \"DEBUG\" will show all logging info."}
+								"#* The level set includes all lower levels, i.e. \"DEBUG\" will show all logging info."},
+
+		{"enable_websocket",	"#* Enable WebSocket server for Resonite integration. Allows remote viewing of btop interface."},
+
+		{"websocket_port",		"#* Port for WebSocket server to listen on. Default is 8080."}
 	};
 
 	unordered_flat_map<string, string> strings = {
@@ -243,6 +247,7 @@ namespace Config {
 		{"net_auto", true},
 		{"net_sync", false},
 		{"show_battery", true},
+		{"enable_websocket", false},
 		{"vim_keys", false},
 		{"tty_mode", false},
 		{"disk_free_priv", false},
@@ -263,7 +268,8 @@ namespace Config {
 		{"proc_start", 0},
 		{"proc_selected", 0},
 		{"proc_last_selected", 0},
-		{"gpu_mem_override", 0}
+		{"gpu_mem_override", 0},
+		{"websocket_port", 8080}
 	};
 	unordered_flat_map<string, int> intsTmp;
 
@@ -377,6 +383,12 @@ namespace Config {
 
 		else if (name == "update_ms" and i_value > 86400000)
 			validError = "Config value update_ms set too high (>86400000).";
+
+		else if (name == "websocket_port" and i_value < 1024)
+			validError = "Config value websocket_port set too low (<1024).";
+
+		else if (name == "websocket_port" and i_value > 65535)
+			validError = "Config value websocket_port set too high (>65535).";
 
 		else
 			return true;

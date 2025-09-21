@@ -967,8 +967,15 @@ namespace Mem {
 					if (++cy > height - 3) break;
 
 					if (cmp_less_equal(disks.size() * 3 + (show_io_stat ? disk_ios : 0), height - 1)) {
-						out += Mv::to(y + 1 + cy, x + 1 + cx) + (big_disk ? " Used:" + rjust(to_string(disk.used_percent) + '%', 4) : "U") + ' '
-							+ disk_meters_used.at(mount)(disk.used_percent) + rjust(human_used, (big_disk ? 9 : 5));
+						out += Mv::to(y + 1 + cy, x + 1 + cx) + (big_disk ? " Used:" + rjust(to_string(disk.used_percent) + '%', 4) : "U") + ' ';
+						// Only access disk_meters_used if it was created (when show_io_stat is enabled and big_disk condition is met)
+						if (show_io_stat and cmp_less_equal(mem.disks.size() * 3 + disk_ios, height - 1)) {
+							out += disk_meters_used.at(mount)(disk.used_percent);
+						} else {
+							// Fallback to free meter with different styling when used meter is not available
+							out += disk_meters_free.at(mount)(disk.used_percent);
+						}
+						out += rjust(human_used, (big_disk ? 9 : 5));
 						cy++;
 						if (cmp_less_equal(disks.size() * 4 + (show_io_stat ? disk_ios : 0), height - 1)) cy++;
 					}
@@ -1030,8 +1037,8 @@ namespace Net {
 
 			//? Interface selector and buttons
 
-			out += Mv::to(y, x + width - i_size - 9) + title_left + Fx::b + Theme::c("hi_fg") + "<b " + Theme::c("title")
-				+ uresize(selected_iface, i_size) + Theme::c("hi_fg") + " n>" + title_right;
+			out += Mv::to(y, x + width - i_size - 9) + title_left + Fx::b + Theme::c("hi_fg") + '<' + Theme::c("title") + ' '
+				+ uresize(selected_iface, i_size) + ' ' + Theme::c("hi_fg") + '>' + title_right;
 			Input::mouse_mappings["b"] = { y, x + width - i_size - 8, 1, 3 };
 			Input::mouse_mappings["n"] = { y, x + width - 6, 1, 3 };
 			if (width - i_size - ip_size - 20 > 4) {
