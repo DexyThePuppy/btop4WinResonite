@@ -9,6 +9,18 @@
 [![Coffee](https://img.shields.io/badge/-Buy%20me%20a%20Coffee-grey?logo=Ko-fi)](https://ko-fi.com/aristocratos)
 
 
+## Resonite Integration
+
+This script will automatically send the output of btop to all connected websocket clients using Resonite's text markup.
+
+
+## Usage
+
+Running `btop4win.exe` will start a websocket on port 8080 that will periodically send the output of a btop session to all connected clients.
+
+In order to properly display in Resonite, it is recommended to set graph symbol to Block.
+
+A Resonite frontend can be found at `resrec:///U-1TtGn3kT3bc/R-2A131A9A2F1BD46D5723DDDC5B7E7B2B90D525C7B3D5C58D7282C14C193568F5`. It will automatically attempt to connect to the websocket as it is loaded.
 
 ## Index
 
@@ -26,68 +38,6 @@
 * [Configurability](#configurability)
 * [License](#license)
 
-## News
-
-##### 29 August 2022
-
-Release v1.0.1
-
-Changed from using OpenHardwareMonitor to LibreHardwareMonitor and using an intermediary DLL to export functions directly into btop4win.
-
-Made some fixes for detecting GPU memory on integrated GPU's and overall detection for Ryzen Mobile chips.
-
-The 2 available packages are now:
-
-* btop4win:
-
-    Has no support for GPU monitoring, CPU temperature monitoring and does not have accurate CPU clock monitoring.
-    
-    Does not require admin rights to run. (But it's still higly recommended to run as admin, otherwise some process information will be missing.)
-
-* btop4win-LHM
-
-    Has full GPU monitoring, etc. using Libre Hardware Monitor, DLL's included in the package, ([source](https://github.com/aristocratos/LHM-CppExport)).
-
-    Requires admin rights to run.
-
-##### 28 August 2022
-
-Release of btop4win v1.0.0
-
-There are 2 packages to choose from in the releases: btop4win and btop4win-OHMR.
-
-* btop4win:
-
-    Has no support for GPU monitoring, CPU temperature monitoring and does not have accurate CPU clock monitoring. But it does not require admin rights to run.
-
-* btop4win-OHMR:
-
-    Has full GPU monitoring, etc. using a modified version of Open Hardware Monitor Report included in the package, ([source](https://github.com/aristocratos/openhardwaremonitor)).
-
-    It does however requires admin rights to run.
-
-    It currently works by messaging by a text file which isn't ideal.
-
-    Ideas and code contributions for optimizing the communication between the C# code of Open Hardware Monitor Report and the C++ code of btop4win are very welcome!
-
-##### 27 Mars 2022
-
-Started working on btop4win...
-
-<details>
-<summary>More...</summary>
-
-Nothing here...
-
-</details>
-
-## Documents
-
-**[CHANGELOG.md](CHANGELOG.md)**
-
-**[CONTRIBUTING.md](CONTRIBUTING.md)**
-
-**[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**
 
 ## Description
 
